@@ -44,8 +44,10 @@ public class UserController {
         UserEntity addedUser;
         try{
             addedUser = userService.addUser(userEntity);
-        }catch (Exception e){
+        }catch (ConstraintViolationException e){
             return ResponseEntity.badRequest().body("User or email already exists");
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body("Entity is not valid");
         }
 
         final MyUserDetails userDetails = myUserDetailsService.loadUserByUsername(addedUser.getUsername());

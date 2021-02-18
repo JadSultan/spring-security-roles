@@ -15,12 +15,15 @@ public class UserServiceImpl implements UserService{
     @Autowired
     private PasswordEncoder encoder;
 
-    @Override
+ 		@Override
     public UserEntity addUser(UserEntity userEntity){
         modifyUser(userEntity);
-        return userRepository.save(userEntity);
+        try{
+            return userRepository.save(userEntity);
+        }catch(Exception ex){
+            throw new ConstraintViolationException(ex.getMessage(), null, "");
+        }
     }
-
     @Override
     public int getUserId(String username) {
         return userRepository.findByUsernameIgnoreCase(username.toLowerCase()).get().getId();
